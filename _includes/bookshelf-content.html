@@ -1,0 +1,70 @@
+{% assign current_lang = page.lang | default: site.default_lang %}
+{% assign t = site.data.translations[current_lang] %}
+{% assign lang_books = site.books | where: "lang", current_lang | sort: "title" %}
+
+<div class="mb-8">
+  <h1 class="text-4xl font-semibold leading-tight md:text-[2.75rem]">{{ t.bookshelf.title }}</h1>
+</div>
+
+{% if lang_books.size == 0 %}
+<div class="bookshelf-empty rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/50 p-10 text-center text-slate-500 dark:text-slate-400">
+  {{ t.bookshelf.empty }}
+</div>
+{% else %}
+<div class="bookcase">
+  {% assign shelf_order = "reading,finished,wishlist" | split: "," %}
+  {% for status in shelf_order %}
+    {% assign shelf_books = lang_books | where: "status", status %}
+    {% if shelf_books.size > 0 %}
+      {% case status %}
+        {% when 'reading' %}{% assign shelf_label = t.bookshelf.currently_reading %}{% assign dot = 'shelf-dot--reading' %}
+        {% when 'finished' %}{% assign shelf_label = t.bookshelf.finished %}{% assign dot = 'shelf-dot--finished' %}
+        {% when 'wishlist' %}{% assign shelf_label = t.bookshelf.want_to_read %}{% assign dot = 'shelf-dot--wishlist' %}
+      {% endcase %}
+      <div class="bookcase-shelf">
+        <div class="shelf-label"><span class="dot {{ dot }}"></span><span class="txt">{{ shelf_label }}</span><span class="count">{{ shelf_books.size }}</span></div>
+        <div class="shelf-row">
+          {% for book in shelf_books %}
+            {% capture spine %}{% include book-color.html book=book %}{% endcapture %}{% assign spine = spine | strip %}
+            {% assign heights = "142px,128px,114px,150px" | split: "," %}
+            {% assign hidx = book.title | size | modulo: heights.size %}
+            {% assign bh = heights[hidx] %}
+            {% capture cover_url %}{% include book-cover-url.html book=book %}{% endcapture %}{% assign cover_url = cover_url | strip %}
+            <a class="book-spine" style="--spine:{{ spine }};--h:{{ bh }}" href="{{ book.url | relative_url }}" aria-label="{{ book.title }} — {{ book.author }}">
+              <span class="book-pop">
+                <span class="book-pop__art" style="{% if cover_url != '' %}background-image:url('{{ cover_url }}');{% else %}background:{{ spine }};{% endif %}">
+                  {% if book.rating %}<span class="book-pop__rating">★ {{ book.rating }}</span>{% endif %}
+                  {% if cover_url == '' %}<span class="book-pop__label"><span class="book-pop__title">{{ book.title }}</span><span class="book-pop__author">{{ book.author }}</span></span>{% endif %}
+                </span>
+              </span>
+              <span class="book-spine__title">{{ book.title }}</span>
+              <span class="book-spine__author">{{ book.author }}</span>
+            </a>
+          {% endfor %}
+        </div>
+        <div class="shelf-plank"></div>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endif %}
+
+<script>
+(function(){
+  var open = null;
+  document.querySelectorAll('.book-spine').forEach(function(s){
+    s.addEventListener('click', function(e){
+      if (window.matchMedia('(hover: hover)').matches) return;
+      if (!s.classList.contains('is-open')){
+        e.preventDefault();
+        if (open && open !== s) open.classList.remove('is-open');
+        s.classList.add('is-open');
+        open = s;
+      }
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (open && !open.contains(e.target)){ open.classList.remove('is-open'); open = null; }
+  });
+})();
+</script>

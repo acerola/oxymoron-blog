@@ -567,6 +567,41 @@ runner.run("book cover uses image when present and fallback when absent") do
 end
 
 # ---------------------------------------------------------------------------
+# Bookshelf — index pages
+# ---------------------------------------------------------------------------
+
+runner.run("bookshelf index pages are generated for each language") do
+  %w[
+    bookshelf/index.html
+    en/bookshelf/index.html
+    ja/bookshelf/index.html
+    ko/bookshelf/index.html
+  ].each do |route|
+    runner.assert_file_exists(File.join(destination, route))
+  end
+end
+
+runner.run("bookshelf groups books into status shelves with links") do
+  en_shelf = read_output.call("en/bookshelf/index.html")
+  runner.assert_includes(en_shelf, "Currently reading")
+  runner.assert_includes(en_shelf, "Finished")
+  runner.assert_includes(en_shelf, "Want to read")
+  runner.assert_includes(en_shelf, "Atomic Habits")
+  runner.assert_includes(en_shelf, "Project Hail Mary")
+  runner.assert_includes(en_shelf, "Dune")
+  runner.assert_includes(en_shelf, "href=\"/books/project-hail-mary/en/\"")
+end
+
+runner.run("bookshelf is language filtered") do
+  en_shelf = read_output.call("en/bookshelf/index.html")
+  runner.refute_includes(en_shelf, "デューン 砂の惑星")
+
+  ja_shelf = read_output.call("ja/bookshelf/index.html")
+  runner.assert_includes(ja_shelf, "デューン 砂の惑星")
+  runner.refute_includes(ja_shelf, "Dune")
+end
+
+# ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
 

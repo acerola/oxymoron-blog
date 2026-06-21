@@ -52,6 +52,13 @@ module I18nPages
             "permalink" => "/#{lang}/tags/" },
           "{% include tags-content.html %}")
 
+        # Bookshelf: /{lang}/bookshelf/
+        add_page(site, "#{lang}/bookshelf", "index.html",
+          { "layout" => "default", "lang" => lang,
+            "title" => t.dig("bookshelf", "title") || "Bookshelf",
+            "permalink" => "/#{lang}/bookshelf/" },
+          "{% include bookshelf-content.html %}")
+
         # Atom feed: /{lang}/feed.xml
         add_page(site, lang, "feed.xml",
           { "layout" => nil, "lang" => lang,
@@ -67,6 +74,10 @@ module I18nPages
       add_page(site, "tags", "index.html",
         { "layout" => "default", "title" => "Tags", "permalink" => "/tags/" },
         "{% include tags-content.html %}")
+
+      add_page(site, "bookshelf", "index.html",
+        { "layout" => "default", "title" => "Bookshelf", "permalink" => "/bookshelf/" },
+        "{% include bookshelf-content.html %}")
     end
 
     def generate_taxonomy_pages(site, languages)
