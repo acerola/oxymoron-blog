@@ -616,6 +616,16 @@ runner.run("main.css defines bookshelf styles including dark mode") do
   runner.assert_includes(css, "prefers-reduced-motion")
 end
 
+runner.run("spine and fallback cover guard against long-text overflow") do
+  css = read_output.call("assets/css/main.css")
+  # Long spine titles/authors are clipped with an ellipsis instead of escaping the spine
+  runner.assert_includes(css, "text-overflow: ellipsis")
+  # The spine box itself clips anything that exceeds its fixed size
+  runner.assert_match(/\.book-spine\s*\{[^}]*overflow:\s*hidden/m, css)
+  # The detail-page fallback cover clips overflowing long titles
+  runner.assert_match(/\.book-cover--fallback\s*\{[^}]*overflow:\s*hidden/m, css)
+end
+
 runner.run("bookshelf page wires hover-reveal markup and touch script") do
   en_shelf = read_output.call("en/bookshelf/index.html")
   runner.assert_includes(en_shelf, "class=\"bookcase\"")

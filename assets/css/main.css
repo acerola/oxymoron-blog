@@ -158,9 +158,30 @@ header {
   text-decoration: none;
   box-shadow: 1px 0 2px rgba(0, 0, 0, .45), inset 1px 0 0 rgba(255, 255, 255, .18), inset -2px 0 4px rgba(0, 0, 0, .3);
   transition: transform .25s cubic-bezier(.2, .7, .2, 1);
+  overflow: hidden;
 }
-.book-spine__title { font-size: 10.5px; font-weight: 600; }
-.book-spine__author { font-size: 8px; opacity: .7; margin-top: auto; }
+/* Long titles/authors are clipped to the spine with an ellipsis rather than
+   escaping the box. min-width/min-height:0 lets the flex item shrink so the
+   ellipsis can apply in the vertical writing mode. */
+.book-spine__title {
+  font-size: 10.5px;
+  font-weight: 600;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.book-spine__author {
+  font-size: 8px;
+  opacity: .7;
+  margin-top: auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .book-spine:hover,
 .book-spine:focus-visible,
 .book-spine.is-open { transform: translateY(-14px); z-index: 6; outline: none; }
@@ -195,7 +216,7 @@ header {
 }
 .book-pop__rating { align-self: flex-end; background: rgba(0, 0, 0, .45); border-radius: 20px; padding: 2px 7px; font-size: 10px; color: #ffd479; }
 .book-pop__label { margin-top: auto; }
-.book-pop__title { display: block; font-size: 12px; font-weight: 800; line-height: 1.15; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+.book-pop__title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: 12px; font-weight: 800; line-height: 1.15; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
 .book-pop__author { display: block; font-size: 9.5px; opacity: .9; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
 
 /* Detail page cover, rating, status badge */
@@ -204,8 +225,12 @@ header {
   width: 200px; height: 300px; border-radius: 4px 8px 8px 4px;
   display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; color: #fff;
   box-shadow: 0 18px 34px rgba(0, 0, 0, .25);
+  overflow: hidden;
 }
-.book-cover--fallback .t { font-size: 18px; font-weight: 800; line-height: 1.2; }
+.book-cover--fallback .t {
+  font-size: 18px; font-weight: 800; line-height: 1.2;
+  display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden;
+}
 .book-cover--fallback .a { font-size: 13px; opacity: .85; margin-top: 4px; }
 
 .book-stars { display: inline-flex; gap: 1px; font-size: 18px; line-height: 1; }
