@@ -7,8 +7,10 @@
 
   <!-- hreflang tags for SEO -->
   {% if page.ref %}
+    {% assign ref_docs = site.articles %}
+    {% if page.collection == "books" %}{% assign ref_docs = site.books %}{% endif %}
     {% for lang in site.languages %}
-      {% assign alt_post = site.articles | where: "ref", page.ref | where: "lang", lang | first %}
+      {% assign alt_post = ref_docs | where: "ref", page.ref | where: "lang", lang | first %}
       {% if alt_post %}
   <link rel="alternate" hreflang="{{ lang }}" href="{{ alt_post.url | absolute_url }}" />
       {% endif %}

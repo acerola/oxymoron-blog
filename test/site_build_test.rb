@@ -624,6 +624,19 @@ runner.run("bookshelf page wires hover-reveal markup and touch script") do
 end
 
 # ---------------------------------------------------------------------------
+# Bookshelf — hreflang on book pages
+# ---------------------------------------------------------------------------
+
+runner.run("book pages include hreflang alternate links") do
+  ah = read_output.call("books/atomic-habits/en/index.html")
+  runner.assert_includes(ah, 'hreflang="en"')
+  runner.assert_includes(ah, 'hreflang="ja"')
+  runner.assert_includes(ah, 'hreflang="ko"')
+  runner.assert_includes(ah, 'hreflang="x-default"')
+  runner.assert_includes(ah, "/books/atomic-habits/ja/")
+end
+
+# ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
 
