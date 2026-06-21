@@ -220,6 +220,7 @@ header {
 .book-status--wishlist { background: rgba(234, 179, 8, .15); color: #a16207; }
 
 /* Dark mode */
+.dark .book-status--wishlist { color: #eab308; }
 .dark .bookcase {
   background:
     repeating-linear-gradient(90deg, #241a10 0 2px, #2b2013 2px 5px, #241a10 5px 7px),
