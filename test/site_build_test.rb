@@ -526,7 +526,7 @@ end
 # ---------------------------------------------------------------------------
 
 runner.run("book detail pages exist for every language") do
-  %w[atomic-habits project-hail-mary dune].each do |slug|
+  %w[atomic-habits project-hail-mary dune the-pragmatic-programmer].each do |slug|
     %w[en ja ko].each do |lang|
       runner.assert_file_exists(File.join(destination, "books/#{slug}/#{lang}/index.html"))
     end
@@ -589,7 +589,9 @@ runner.run("bookshelf groups books into status shelves with links") do
   runner.assert_includes(en_shelf, "Atomic Habits")
   runner.assert_includes(en_shelf, "Project Hail Mary")
   runner.assert_includes(en_shelf, "Dune")
+  runner.assert_includes(en_shelf, "The Pragmatic Programmer")
   runner.assert_includes(en_shelf, "href=\"/books/project-hail-mary/en/\"")
+  runner.assert_includes(en_shelf, "href=\"/books/the-pragmatic-programmer/en/\"")
 end
 
 runner.run("bookshelf is language filtered") do
