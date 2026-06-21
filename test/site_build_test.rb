@@ -633,6 +633,8 @@ runner.run("bookshelf page wires hover-reveal markup and touch script") do
   runner.assert_includes(en_shelf, "book-pop")
   runner.assert_includes(en_shelf, "is-open")
   runner.assert_includes(en_shelf, "addEventListener")
+  # Spines carry an auto-contrast text color derived from the spine color
+  runner.assert_includes(en_shelf, ";color:#")
 end
 
 # ---------------------------------------------------------------------------

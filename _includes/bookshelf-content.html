@@ -24,28 +24,26 @@
       <div class="bookcase-shelf">
         <div class="shelf-label"><span class="dot {{ dot }}"></span><span class="txt">{{ shelf_label }}</span><span class="count">{{ shelf_books.size }}</span></div>
         <div class="shelf-row">
-          {% for book in shelf_books %}
-            {% capture spine %}{% include book-color.html book=book %}{% endcapture %}{% assign spine = spine | strip %}
-            {% assign heights = "142px,128px,114px,150px" | split: "," %}
-            {% assign hidx = book.title | size | modulo: heights.size %}
-            {% assign bh = heights[hidx] %}
-            {% capture cover_url %}{% include book-cover-url.html book=book %}{% endcapture %}{% assign cover_url = cover_url | strip %}
-            <a class="book-spine" style="--spine:{{ spine }};--h:{{ bh }}" href="{{ book.url | relative_url }}" aria-label="{{ book.title }} — {{ book.author }}">
-              <span class="book-pop">
-                <span class="book-pop__art" style="{% if cover_url != '' %}background-image:url('{{ cover_url }}');{% else %}background:{{ spine }};{% endif %}">
-                  {% if book.rating %}<span class="book-pop__rating">★ {{ book.rating }}</span>{% endif %}
-                  {% if cover_url == '' %}<span class="book-pop__label"><span class="book-pop__title">{{ book.title }}</span><span class="book-pop__author">{{ book.author }}</span></span>{% endif %}
-                </span>
-              </span>
-              <span class="book-spine__title">{{ book.title }}</span>
-              <span class="book-spine__author">{{ book.author }}</span>
-            </a>
-          {% endfor %}
+          {% for book in shelf_books %}{% include book-spine.html book=book %}{% endfor %}
         </div>
         <div class="shelf-plank"></div>
       </div>
     {% endif %}
   {% endfor %}
+
+  {% comment %} Catch-all so a typo'd/unknown status never silently hides a book. {% endcomment %}
+  {% assign known = "reading,finished,wishlist" | split: "," %}
+  {% assign other_books = "" | split: "" %}
+  {% for book in lang_books %}{% unless known contains book.status %}{% assign other_books = other_books | push: book %}{% endunless %}{% endfor %}
+  {% if other_books.size > 0 %}
+    <div class="bookcase-shelf">
+      <div class="shelf-label"><span class="dot shelf-dot--other"></span><span class="txt">{{ t.bookshelf.other }}</span><span class="count">{{ other_books.size }}</span></div>
+      <div class="shelf-row">
+        {% for book in other_books %}{% include book-spine.html book=book %}{% endfor %}
+      </div>
+      <div class="shelf-plank"></div>
+    </div>
+  {% endif %}
 </div>
 {% endif %}
 

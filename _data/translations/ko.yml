@@ -64,3 +64,4 @@ bookshelf:
   by: "지음"
   back_to_shelf: "책장으로 돌아가기"
   empty: "아직 책이 없습니다."
+  other: "기타"

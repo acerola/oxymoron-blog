@@ -8,6 +8,8 @@ layout: default
 {% assign cover_url = cover_url | strip %}
 {% capture spine %}{% include book-color.html book=page %}{% endcapture %}
 {% assign spine = spine | strip %}
+{% capture text_color %}{% include book-text-color.html color=spine %}{% endcapture %}
+{% assign text_color = text_color | strip %}
 {% case page.status %}
   {% when 'reading' %}{% assign status_label = t.bookshelf.currently_reading %}{% assign status_class = 'book-status--reading' %}
   {% when 'finished' %}{% assign status_label = t.bookshelf.finished %}{% assign status_class = 'book-status--finished' %}
@@ -20,7 +22,7 @@ layout: default
       {% if cover_url != "" %}
       <img class="book-cover" src="{{ cover_url }}" alt="{{ page.title }} — {{ page.author }}">
       {% else %}
-      <div class="book-cover--fallback" style="background:{{ spine }}">
+      <div class="book-cover--fallback" style="background:{{ spine }};color:{{ text_color }}">
         <span class="t">{{ page.title }}</span>
         <span class="a">{{ page.author }}</span>
       </div>

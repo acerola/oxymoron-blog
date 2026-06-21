@@ -1,4 +1,5 @@
-{%- assign rating = include.rating -%}
+{%- comment -%} Clamp to 0–5 so a bad value can't render stray/extra stars. {%- endcomment -%}
+{%- assign rating = include.rating | at_least: 0 | at_most: 5 -%}
 {%- assign full = rating | floor -%}
 {%- assign frac = rating | minus: full -%}
 {%- assign next = full | plus: 1 -%}

@@ -64,3 +64,4 @@ bookshelf:
   by: "by"
   back_to_shelf: "Back to bookshelf"
   empty: "No books on the shelf yet."
+  other: "Other"

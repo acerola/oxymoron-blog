@@ -64,3 +64,4 @@ bookshelf:
   by: "著"
   back_to_shelf: "本棚に戻る"
   empty: "まだ本がありません。"
+  other: "その他"

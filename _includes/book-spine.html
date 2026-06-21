@@ -1,0 +1,20 @@
+{%- comment -%}
+Renders one book as a shelf spine with its hover-float cover.
+Usage: {% include book-spine.html book=book %}
+{%- endcomment -%}
+{% capture spine %}{% include book-color.html book=include.book %}{% endcapture %}{% assign spine = spine | strip %}
+{% capture text_color %}{% include book-text-color.html color=spine %}{% endcapture %}{% assign text_color = text_color | strip %}
+{% assign heights = "142px,128px,114px,150px" | split: "," %}
+{% assign hidx = include.book.title | size | modulo: heights.size %}
+{% assign bh = heights[hidx] %}
+{% capture cover_url %}{% include book-cover-url.html book=include.book %}{% endcapture %}{% assign cover_url = cover_url | strip %}
+<a class="book-spine" style="--spine:{{ spine }};--h:{{ bh }};color:{{ text_color }}" href="{{ include.book.url | relative_url }}" aria-label="{{ include.book.title }} — {{ include.book.author }}">
+  <span class="book-pop">
+    <span class="book-pop__art" style="{% if cover_url != '' %}background-image:url('{{ cover_url }}');{% else %}background:{{ spine }};color:{{ text_color }};{% endif %}">
+      {% if include.book.rating %}<span class="book-pop__rating">★ {{ include.book.rating }}</span>{% endif %}
+      {% if cover_url == '' %}<span class="book-pop__label"><span class="book-pop__title">{{ include.book.title }}</span><span class="book-pop__author">{{ include.book.author }}</span></span>{% endif %}
+    </span>
+  </span>
+  <span class="book-spine__title">{{ include.book.title }}</span>
+  <span class="book-spine__author">{{ include.book.author }}</span>
+</a>

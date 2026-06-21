@@ -1,0 +1,25 @@
+{%- comment -%}
+Returns a legible text color (#1f2937 dark or #ffffff white) for a given hex
+background color, based on its approximate luminance. Uses the high nibble of
+each channel (hex[0],[2],[4]) — accurate enough for a light/dark decision and
+the only practical way to read a hex value in Liquid. Falls back to white.
+Usage: {% include book-text-color.html color="#0e7490" %}
+{%- endcomment -%}
+{%- assign hexmap = "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f" | split: "," -%}
+{%- assign hex = include.color | remove: "#" | downcase -%}
+{%- if hex.size >= 6 -%}
+  {%- assign rc = hex | slice: 0 -%}
+  {%- assign gc = hex | slice: 2 -%}
+  {%- assign bc = hex | slice: 4 -%}
+  {%- assign ri = 0 -%}{%- assign gi = 0 -%}{%- assign bi = 0 -%}
+  {%- for h in hexmap -%}
+    {%- if h == rc -%}{%- assign ri = forloop.index0 -%}{%- endif -%}
+    {%- if h == gc -%}{%- assign gi = forloop.index0 -%}{%- endif -%}
+    {%- if h == bc -%}{%- assign bi = forloop.index0 -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign ra = ri | times: 299 -%}
+  {%- assign ga = gi | times: 587 -%}
+  {%- assign ba = bi | times: 114 -%}
+  {%- assign lum = ra | plus: ga | plus: ba -%}
+  {%- if lum > 9000 -%}#1f2937{%- else -%}#ffffff{%- endif -%}
+{%- else -%}#ffffff{%- endif -%}

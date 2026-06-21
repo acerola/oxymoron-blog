@@ -130,6 +130,7 @@ header {
 .shelf-dot--reading { background: #fc4d50; }
 .shelf-dot--finished { background: #22c55e; }
 .shelf-dot--wishlist { background: #eab308; }
+.shelf-dot--other { background: #94a3b8; }
 .shelf-label .txt { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #f1e3d0; }
 .shelf-label .count { font-size: 10px; color: #c9b79f; }
 
