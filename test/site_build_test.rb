@@ -522,6 +522,51 @@ runner.run("navigation includes localized Bookshelf link") do
 end
 
 # ---------------------------------------------------------------------------
+# Bookshelf — book detail pages
+# ---------------------------------------------------------------------------
+
+runner.run("book detail pages exist for every language") do
+  %w[atomic-habits project-hail-mary dune].each do |slug|
+    %w[en ja ko].each do |lang|
+      runner.assert_file_exists(File.join(destination, "books/#{slug}/#{lang}/index.html"))
+    end
+  end
+end
+
+runner.run("book page shows title, author, status and review body") do
+  ah = read_output.call("books/atomic-habits/en/index.html")
+  runner.assert_includes(ah, "Atomic Habits")
+  runner.assert_includes(ah, "James Clear")
+  runner.assert_includes(ah, "Finished")
+  runner.assert_includes(ah, "Small habits compound")
+end
+
+runner.run("rated book renders star rating, wishlist book does not") do
+  ah = read_output.call("books/atomic-habits/en/index.html")
+  runner.assert_includes(ah, "book-stars")
+  runner.assert_includes(ah, "4.0 / 5")
+
+  dune = read_output.call("books/dune/en/index.html")
+  runner.refute_includes(dune, "book-stars")
+end
+
+runner.run("book page has language switcher and back-to-shelf link") do
+  ah = read_output.call("books/atomic-habits/en/index.html")
+  runner.assert_includes(ah, "/books/atomic-habits/ja/")
+  runner.assert_includes(ah, "/books/atomic-habits/ko/")
+  runner.assert_includes(ah, "href=\"/en/bookshelf/\"")
+  runner.assert_includes(ah, "Back to bookshelf")
+end
+
+runner.run("book cover uses image when present and fallback when absent") do
+  ah = read_output.call("books/atomic-habits/en/index.html")
+  runner.assert_includes(ah, "/assets/books/atomic-habits/cover.png")
+
+  phm = read_output.call("books/project-hail-mary/en/index.html")
+  runner.assert_includes(phm, "book-cover--fallback")
+end
+
+# ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
 

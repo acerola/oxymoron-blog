@@ -1,0 +1,74 @@
+---
+layout: default
+---
+{% assign current_lang = page.lang | default: site.default_lang %}
+{% assign t = site.data.translations[current_lang] %}
+{% assign lang_prefix = "/" | append: current_lang %}
+{% capture cover_url %}{% include book-cover-url.html book=page %}{% endcapture %}
+{% assign cover_url = cover_url | strip %}
+{% capture spine %}{% include book-color.html book=page %}{% endcapture %}
+{% assign spine = spine | strip %}
+{% case page.status %}
+  {% when 'reading' %}{% assign status_label = t.bookshelf.currently_reading %}{% assign status_class = 'book-status--reading' %}
+  {% when 'finished' %}{% assign status_label = t.bookshelf.finished %}{% assign status_class = 'book-status--finished' %}
+  {% when 'wishlist' %}{% assign status_label = t.bookshelf.want_to_read %}{% assign status_class = 'book-status--wishlist' %}
+{% endcase %}
+
+<article class="mt-10">
+  <div class="flex flex-col gap-6 md:flex-row md:gap-10">
+    <div class="md:flex-none">
+      {% if cover_url != "" %}
+      <img class="book-cover" src="{{ cover_url }}" alt="{{ page.title }}">
+      {% else %}
+      <div class="book-cover--fallback" style="background:{{ spine }}">
+        <span class="t">{{ page.title }}</span>
+        <span class="a">{{ page.author }}</span>
+      </div>
+      {% endif %}
+    </div>
+
+    <div>
+      <span class="book-status-badge {{ status_class }}">{{ status_label }}</span>
+      <h1 class="mt-3 text-4xl font-semibold leading-tight">{{ page.title }}</h1>
+      <p class="mt-2 text-lg text-slate-500 dark:text-slate-400">{{ t.bookshelf.by }} {{ page.author }}</p>
+
+      {% if page.rating %}
+      <div class="mt-3 flex flex-wrap items-center gap-2">
+        {% include book-rating.html rating=page.rating %}
+        <span class="text-sm text-slate-500 dark:text-slate-400">{{ page.rating }}</span>
+      </div>
+      {% endif %}
+
+      {% if page.ref %}
+      {% assign translations = site.books | where: "ref", page.ref %}
+      {% if translations.size > 1 %}
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <span class="text-xs text-slate-500 dark:text-slate-400">{{ t.post.read_in }}:</span>
+        <div class="flex items-center gap-2">
+          {% for lang in site.languages %}
+            {% assign alt = site.books | where: "ref", page.ref | where: "lang", lang | first %}
+            {% if alt %}
+            <a href="{{ alt.url | relative_url }}"
+               class="rounded-lg px-3 py-1.5 text-sm font-medium {% if lang == current_lang %}bg-[#fc4d50] text-white{% else %}bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700{% endif %} transition-colors"
+               title="{{ site.data.languages[lang].label }}">
+              <span class="font-semibold">{{ site.data.languages[lang].icon }}</span>
+            </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="prose prose-lg prose-slate dark:prose-invert mt-8 max-w-none rounded-[32px] border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-800/50 px-8 py-10">
+    {{ content }}
+  </div>
+
+  <section class="mt-12 border-t border-slate-200 dark:border-slate-800 pt-6 text-sm">
+    <a class="inline-flex items-center gap-2 font-semibold text-[#fc4d50]" href="{{ lang_prefix | append: '/bookshelf/' | relative_url }}">
+      <span aria-hidden="true">&larr;</span> {{ t.bookshelf.back_to_shelf }}
+    </a>
+  </section>
+</article>

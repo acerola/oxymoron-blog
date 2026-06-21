@@ -1,0 +1,9 @@
+{%- assign u = "" -%}
+{%- if include.book.cover and include.book.cover != "" -%}
+  {%- assign u = include.book.cover | relative_url -%}
+{%- else -%}
+  {%- assign dir = "/assets/books/" | append: include.book.ref | append: "/" -%}
+  {%- assign f = site.static_files | where_exp: "x", "x.path contains dir" | first -%}
+  {%- if f -%}{%- assign u = f.path | relative_url -%}{%- endif -%}
+{%- endif -%}
+{{- u -}}

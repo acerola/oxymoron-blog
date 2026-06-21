@@ -1,0 +1,5 @@
+{%- assign rating = include.rating -%}
+{%- assign full = rating | floor -%}
+{%- assign frac = rating | minus: full -%}
+{%- assign next = full | plus: 1 -%}
+<span class="book-stars" aria-label="{{ rating }} / 5">{% for i in (1..5) %}{% if i <= full %}<span class="star star--full">★</span>{% elsif i == next and frac >= 0.5 %}<span class="star star--half">★</span>{% else %}<span class="star star--empty">★</span>{% endif %}{% endfor %}</span>

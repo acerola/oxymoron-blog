@@ -32,6 +32,9 @@ collections:
   articles:
     output: true
     permalink: /posts/:path/
+  books:
+    output: true
+    permalink: /books/:path/
 
 defaults:
   - scope:
@@ -44,6 +47,11 @@ defaults:
     values:
       layout: post
       hidden: false
+  - scope:
+      path: "_books"
+      type: "books"
+    values:
+      layout: book
 
 # Giscus Comments Configuration
 # To enable comments:
