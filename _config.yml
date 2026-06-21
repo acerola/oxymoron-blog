@@ -53,6 +53,28 @@ defaults:
     values:
       layout: book
 
+# Files/dirs kept out of the built site.
+# NOTE: setting `exclude` replaces Jekyll's defaults, so the standard
+# entries are repeated here alongside our additions (docs, tooling, tests).
+exclude:
+  - .sass-cache
+  - .jekyll-cache
+  - gemfiles
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - docs
+  - test
+  - README.md
+  - package.json
+  - package-lock.json
+  - tailwind.config.js
+  - assets/css/tailwind.src.css
+
 # Giscus Comments Configuration
 # To enable comments:
 # 1. Go to https://giscus.app
