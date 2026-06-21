@@ -6,6 +6,7 @@ site:
 nav:
   blog: "Blog"
   writing: "Writing"
+  bookshelf: "Bookshelf"
   about: "About"
   contact: "Contact"
   toggle_dark_mode: "Toggle dark mode"
@@ -53,3 +54,13 @@ common:
   post_singular: "post"
   post_plural: "posts"
   across_all: "across all posts"
+
+bookshelf:
+  title: "Bookshelf"
+  currently_reading: "Currently reading"
+  finished: "Finished"
+  want_to_read: "Want to read"
+  rating: "Rating"
+  by: "by"
+  back_to_shelf: "Back to bookshelf"
+  empty: "No books on the shelf yet."

@@ -6,6 +6,7 @@ site:
 nav:
   blog: "블로그"
   writing: "글"
+  bookshelf: "책장"
   about: "소개"
   contact: "연락처"
   toggle_dark_mode: "다크 모드 전환"
@@ -53,3 +54,13 @@ common:
   post_singular: "개 글"
   post_plural: "개 글"
   across_all: "전체 글 중"
+
+bookshelf:
+  title: "책장"
+  currently_reading: "읽는 중"
+  finished: "다 읽음"
+  want_to_read: "읽고 싶음"
+  rating: "평점"
+  by: "지음"
+  back_to_shelf: "책장으로 돌아가기"
+  empty: "아직 책이 없습니다."

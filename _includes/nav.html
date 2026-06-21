@@ -36,6 +36,11 @@ current_lang %}
                     >{{ t.nav.writing }}</a
                 >
                 <a
+                    href="{{ lang_prefix | append: '/bookshelf/' | relative_url }}"
+                    class="nav-link text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+                    >{{ t.nav.bookshelf }}</a
+                >
+                <a
                     href="{{ lang_prefix | append: '/about' | relative_url }}"
                     class="nav-link text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                     >{{ t.nav.about }}</a

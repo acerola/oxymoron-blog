@@ -505,6 +505,23 @@ runner.run("home page shows visible post count") do
 end
 
 # ---------------------------------------------------------------------------
+# Bookshelf — navigation link
+# ---------------------------------------------------------------------------
+
+runner.run("navigation includes localized Bookshelf link") do
+  en_home = read_output.call("en/index.html")
+  ja_home = read_output.call("ja/index.html")
+  ko_home = read_output.call("ko/index.html")
+
+  runner.assert_includes(en_home, "Bookshelf")
+  runner.assert_includes(en_home, "href=\"/en/bookshelf/\"")
+  runner.assert_includes(ja_home, "本棚")
+  runner.assert_includes(ja_home, "href=\"/ja/bookshelf/\"")
+  runner.assert_includes(ko_home, "책장")
+  runner.assert_includes(ko_home, "href=\"/ko/bookshelf/\"")
+end
+
+# ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
 

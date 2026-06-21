@@ -6,6 +6,7 @@ site:
 nav:
   blog: "ブログ"
   writing: "記事"
+  bookshelf: "本棚"
   about: "紹介"
   contact: "連絡先"
   toggle_dark_mode: "ダークモード切替"
@@ -53,3 +54,13 @@ common:
   post_singular: "件"
   post_plural: "件"
   across_all: "全記事中"
+
+bookshelf:
+  title: "本棚"
+  currently_reading: "読書中"
+  finished: "読了"
+  want_to_read: "読みたい"
+  rating: "評価"
+  by: "著"
+  back_to_shelf: "本棚に戻る"
+  empty: "まだ本がありません。"
