@@ -614,6 +614,9 @@ runner.run("main.css defines bookshelf styles including dark mode") do
   runner.assert_includes(css, ".book-pop")
   runner.assert_includes(css, ".dark .bookcase")
   runner.assert_includes(css, "prefers-reduced-motion")
+  # Overfull shelves scroll horizontally; the hover cover renders in a portal
+  runner.assert_includes(css, "overflow-x: auto")
+  runner.assert_includes(css, ".book-pop-portal")
 end
 
 runner.run("spine and fallback cover guard against long-text overflow") do
@@ -626,12 +629,13 @@ runner.run("spine and fallback cover guard against long-text overflow") do
   runner.assert_match(/\.book-cover--fallback\s*\{[^}]*overflow:\s*hidden/m, css)
 end
 
-runner.run("bookshelf page wires hover-reveal markup and touch script") do
+runner.run("bookshelf page wires hover-reveal markup and portal script") do
   en_shelf = read_output.call("en/bookshelf/index.html")
   runner.assert_includes(en_shelf, "class=\"bookcase\"")
   runner.assert_includes(en_shelf, "book-spine")
   runner.assert_includes(en_shelf, "book-pop")
-  runner.assert_includes(en_shelf, "is-open")
+  # Hover cover is rendered into a body-level portal (not clipped by the scroll row)
+  runner.assert_includes(en_shelf, "book-pop-portal")
   runner.assert_includes(en_shelf, "addEventListener")
   # Spines carry an auto-contrast text color derived from the spine color
   runner.assert_includes(en_shelf, ";color:#")

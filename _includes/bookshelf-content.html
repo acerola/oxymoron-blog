@@ -49,20 +49,61 @@
 
 <script>
 (function(){
-  var open = null;
+  // Render each spine's cover into a single body-level portal so the
+  // horizontal-scroll shelf row can't clip it. Source data is the spine's
+  // hidden .book-pop markup.
+  var portal = document.createElement('div');
+  portal.className = 'book-pop-portal';
+  document.body.appendChild(portal);
+  var current = null;
+  var hoverCapable = window.matchMedia('(hover: hover)').matches;
+
+  function place(spine){
+    var r = spine.getBoundingClientRect();
+    portal.style.display = 'block';
+    var pw = portal.offsetWidth || 120;
+    var ph = portal.offsetHeight || 170;
+    var left = window.scrollX + r.left + (r.width / 2) - (pw / 2);
+    var minLeft = window.scrollX + 4;
+    var maxLeft = window.scrollX + document.documentElement.clientWidth - pw - 4;
+    if (left < minLeft) left = minLeft;
+    if (left > maxLeft) left = maxLeft;
+    var top = window.scrollY + r.top - ph - 8;
+    if (top < window.scrollY + 4) top = window.scrollY + r.bottom + 8; // flip below if no room above
+    portal.style.left = left + 'px';
+    portal.style.top = top + 'px';
+  }
+  function show(spine){
+    var src = spine.querySelector('.book-pop');
+    if (!src) return;
+    portal.innerHTML = src.innerHTML;
+    current = spine;
+    place(spine);
+    portal.getBoundingClientRect(); // reflow so the transition runs
+    portal.classList.add('is-shown');
+  }
+  function hide(){
+    portal.classList.remove('is-shown');
+    current = null;
+  }
+
   document.querySelectorAll('.book-spine').forEach(function(s){
-    s.addEventListener('click', function(e){
-      if (window.matchMedia('(hover: hover)').matches) return;
-      if (!s.classList.contains('is-open')){
-        e.preventDefault();
-        if (open && open !== s) open.classList.remove('is-open');
-        s.classList.add('is-open');
-        open = s;
-      }
-    });
+    if (hoverCapable){
+      s.addEventListener('mouseenter', function(){ show(s); });
+      s.addEventListener('mouseleave', hide);
+      s.addEventListener('focus', function(){ show(s); });
+      s.addEventListener('blur', hide);
+    } else {
+      s.addEventListener('click', function(e){
+        if (current !== s){ e.preventDefault(); show(s); } // first tap peeks, second navigates
+      });
+    }
   });
+  // Avoid stale positioning: hide on any scroll (incl. the shelf row) or resize.
+  window.addEventListener('scroll', function(){ if (current) hide(); }, true);
+  window.addEventListener('resize', function(){ if (current) hide(); });
   document.addEventListener('click', function(e){
-    if (open && !open.contains(e.target)){ open.classList.remove('is-open'); open = null; }
+    if (!hoverCapable && current && !current.contains(e.target)) hide();
   });
 })();
 </script>
