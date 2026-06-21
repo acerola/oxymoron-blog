@@ -344,7 +344,7 @@ status: wishlist
 ref: dune
 lang: ja
 ---
-積read リストに入っている。
+積ん読リストに入っている。
 ```
 
 `_books/dune/ko.md`:
