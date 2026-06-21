@@ -602,6 +602,28 @@ runner.run("bookshelf is language filtered") do
 end
 
 # ---------------------------------------------------------------------------
+# Bookshelf — styling & interaction wiring
+# ---------------------------------------------------------------------------
+
+runner.run("main.css defines bookshelf styles including dark mode") do
+  css = read_output.call("assets/css/main.css")
+  runner.assert_includes(css, ".bookcase")
+  runner.assert_includes(css, ".book-spine")
+  runner.assert_includes(css, ".book-pop")
+  runner.assert_includes(css, ".dark .bookcase")
+  runner.assert_includes(css, "prefers-reduced-motion")
+end
+
+runner.run("bookshelf page wires hover-reveal markup and touch script") do
+  en_shelf = read_output.call("en/bookshelf/index.html")
+  runner.assert_includes(en_shelf, "class=\"bookcase\"")
+  runner.assert_includes(en_shelf, "book-spine")
+  runner.assert_includes(en_shelf, "book-pop")
+  runner.assert_includes(en_shelf, "is-open")
+  runner.assert_includes(en_shelf, "addEventListener")
+end
+
+# ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
 
