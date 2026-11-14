@@ -76,7 +76,7 @@ current_lang %}
                             {% for lang_code in site.languages %} {% assign
                             lang_data = site.data.languages[lang_code] %} {%
                             comment %} Determine the URL for this language {%
-                            endcomment %} {% if page.ref %} {% comment %}
+                            endcomment %} {% if page.ref and page.collection == "articles" %} {% comment %}
                             Article: try to find translated version {%
                             endcomment %} {% assign translated_post =
                             site.articles | where: "ref", page.ref | where:

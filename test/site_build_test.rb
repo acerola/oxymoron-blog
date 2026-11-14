@@ -30,6 +30,7 @@ hidden_by_lang  = {}
                                       .sort_by { |a| a[:date] }.reverse
   hidden_by_lang[lang]  = all_articles.select { |a| a[:lang] == lang && a[:hidden] }
 end
+book_counts = visible_by_lang.transform_values { |list| list.count { |a| a[:category] == "Book" } }
 
 # ---------------------------------------------------------------------------
 # Core routes
@@ -84,10 +85,10 @@ runner.run("language home pages show only visible posts for that language") do
       runner.refute_includes(home, article[:title])
     end
 
-    # Titles from other languages' visible posts should not appear
+    # Posts from other languages should not appear (by URL: titles may repeat across languages)
     (%w[en ja ko] - [lang]).each do |other|
       visible_by_lang[other].each do |article|
-        runner.refute_includes(home, article[:title])
+        runner.refute_includes(home, "/posts/#{article[:slug]}/#{other}/")
       end
     end
   end
@@ -187,8 +188,8 @@ runner.run("taxonomy index aggregation is scoped to the active language") do
   ko_cat_count = visible_by_lang["ko"].map { |a| a[:category] }.compact.uniq.size
 
   runner.assert_includes(en_categories, "#{en_cat_count} categories")
-  runner.assert_includes(en_categories, ">1 posts<")
-  runner.refute_includes(en_categories, ">3 posts<")
+  runner.assert_includes(en_categories, ">#{book_counts["en"]} posts<")
+  runner.refute_includes(en_categories, ">#{book_counts.values.sum} posts<")
 
   runner.assert_includes(ja_categories, "#{ja_cat_count} カテゴリー")
   runner.assert_includes(ko_categories, "#{ko_cat_count} 카테고리")
@@ -414,7 +415,7 @@ end
 runner.run("category detail page shows post count and category name") do
   book_en = read_output.call("en/categories/book/index.html")
   runner.assert_includes(book_en, "Book")
-  runner.assert_includes(book_en, "1 posts")
+  runner.assert_includes(book_en, "#{book_counts["en"]} posts")
 end
 
 runner.run("category detail page has view-all-categories link") do
@@ -556,6 +557,12 @@ runner.run("book page has language switcher and back-to-shelf link") do
   runner.assert_includes(ah, "/books/atomic-habits/ko/")
   runner.assert_includes(ah, "href=\"/en/bookshelf/\"")
   runner.assert_includes(ah, "Back to bookshelf")
+end
+
+runner.run("book sharing a ref with an article keeps its own language switcher") do
+  book = read_output.call("books/generative-ai-design-patterns/en/index.html")
+  runner.assert_includes(book, "href=\"/books/generative-ai-design-patterns/ja/\"")
+  runner.refute_includes(book, "/posts/2026-11-10-generative-ai-design-patterns/ja/")
 end
 
 runner.run("book cover uses image when present and fallback when absent") do
